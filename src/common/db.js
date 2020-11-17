@@ -16,9 +16,27 @@ const create = async (tableName, entity) => {
 };
 
 const update = async (tableName, id, user) => {
-  console.log(id, user);
+  const oldUser = await get(tableName, id);
+  const index = DB[tableName].indexOf(oldUser);
 
-  return 1;
+  if (index < 0) {
+    return undefined;
+  }
+
+  DB[tableName][index] = { ...oldUser, ...user };
+
+  return DB[tableName][index];
+};
+
+const deleteItem = async (tableName, id) => {
+  const deletedUser = await get(tableName, id);
+  const index = DB[tableName].indexOf(deletedUser);
+
+  if (index < 0) {
+    return undefined;
+  }
+
+  return DB[tableName].splice(index, 1);
 };
 
 DB.users.push(
@@ -31,5 +49,6 @@ module.exports = {
   getAll,
   get,
   create,
-  update
+  update,
+  deleteItem
 };

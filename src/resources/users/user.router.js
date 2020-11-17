@@ -42,4 +42,13 @@ router.route('/:id').put(
   })
 );
 
+router.route('/:id').delete(
+  errors.asyncWrapper(async (req, res) => {
+    await userService.deleteUser(req.params.id);
+    // add delete task
+
+    res.sendStatus(204);
+  })
+);
+
 module.exports = router;

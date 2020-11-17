@@ -9,5 +9,6 @@ const createError = statusCode =>
   };
 
 module.exports = {
-  NOT_FOUND: createError(StatusCodes.NOT_FOUND)
+  NOT_FOUND: createError(StatusCodes.NOT_FOUND),
+  BAD_REQUEST: createError(StatusCodes.BAD_REQUEST)
 };

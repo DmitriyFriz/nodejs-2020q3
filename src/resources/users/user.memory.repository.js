@@ -17,6 +17,22 @@ const get = async id => {
 
 const create = async user => DB.create(TABLE_NAME, user);
 
-const update = async (id, user) => DB.update(TABLE_NAME, id, user);
+const update = async (id, user) => {
+  const newUser = await DB.update(TABLE_NAME, id, user);
 
-module.exports = { getAll, get, create, update };
+  if (!newUser) {
+    throw new errors.BAD_REQUEST(`The user with id: ${id} doesn't exist`);
+  }
+
+  return newUser;
+};
+
+const deleteUser = async id => {
+  const deletedUser = await DB.deleteItem(TABLE_NAME, id);
+
+  if (!deletedUser) {
+    throw new errors.NOT_FOUND(`The user with id: ${id} not found`);
+  }
+};
+
+module.exports = { getAll, get, create, update, deleteUser };
