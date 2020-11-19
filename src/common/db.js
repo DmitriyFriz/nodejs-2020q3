@@ -1,4 +1,5 @@
 const User = require('../resources/users/user.model');
+const Board = require('../resources/boards/board.model');
 
 const DB = {
   users: [],
@@ -39,11 +40,26 @@ const deleteItem = async (tableName, id) => {
   return DB[tableName].splice(index, 1);
 };
 
+// code below is for the testing
 DB.users.push(
   new User(),
   new User(),
   new User({ name: 'b', login: 1, password: 4 })
 );
+
+DB.boards.push(
+  new Board(),
+  new Board({
+    title: 'my board',
+    columns: [
+      {
+        order: 100500
+      }
+    ]
+  })
+);
+
+//
 
 module.exports = {
   getAll,

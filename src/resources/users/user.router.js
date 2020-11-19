@@ -2,7 +2,6 @@ const router = require('express').Router();
 const User = require('./user.model');
 const usersService = require('./user.service');
 const errors = require('../../errors/errors.handlers');
-const userService = require('./user.service');
 
 router.route('/').get(
   errors.asyncWrapper(async (req, res) => {
@@ -32,7 +31,7 @@ router.route('/').post(
 router.route('/:id').put(
   errors.asyncWrapper(async (req, res) => {
     const { name, login, password } = req.body;
-    const user = await userService.update(req.params.id, {
+    const user = await usersService.update(req.params.id, {
       name,
       login,
       password
@@ -44,7 +43,7 @@ router.route('/:id').put(
 
 router.route('/:id').delete(
   errors.asyncWrapper(async (req, res) => {
-    await userService.deleteUser(req.params.id);
+    await usersService.deleteUser(req.params.id);
     // add delete task
 
     res.sendStatus(204);
