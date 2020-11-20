@@ -28,7 +28,7 @@ const update = async (id, user) => {
 };
 
 const deleteUser = async id => {
-  const deletedUser = await DB.deleteItem(TABLE_NAME, id);
+  const deletedUser = await DB.deleteEntity(TABLE_NAME, id);
 
   if (!deletedUser) {
     throw new errors.NOT_FOUND(`The user with id: ${id} not found`);

@@ -7,31 +7,37 @@ const DB = {
   tasks: []
 };
 
+const getEntityById = async (tableName, id) =>
+  DB[tableName].find(item => item.id === id);
+
 const getAll = async tableName => DB[tableName].concat();
 
-const get = async (tableName, id) => DB[tableName].find(item => item.id === id);
+const get = async (tableName, id) => {
+  const item = await getEntityById(tableName, id);
+  return item ? { ...item } : undefined;
+};
 
 const create = async (tableName, entity) => {
   DB[tableName].push(entity);
   return get(tableName, entity.id);
 };
 
-const update = async (tableName, id, user) => {
-  const oldUser = await get(tableName, id);
-  const index = DB[tableName].indexOf(oldUser);
+const update = async (tableName, id, entity) => {
+  const oldEntity = await getEntityById(tableName, id);
+  const index = DB[tableName].indexOf(oldEntity);
 
   if (index < 0) {
     return undefined;
   }
 
-  DB[tableName][index] = { ...oldUser, ...user };
+  DB[tableName][index] = { ...oldEntity, ...entity };
 
-  return DB[tableName][index];
+  return { ...DB[tableName][index] };
 };
 
-const deleteItem = async (tableName, id) => {
-  const deletedUser = await get(tableName, id);
-  const index = DB[tableName].indexOf(deletedUser);
+const deleteEntity = async (tableName, id) => {
+  const deletedEntity = await getEntityById(tableName, id);
+  const index = DB[tableName].indexOf(deletedEntity);
 
   if (index < 0) {
     return undefined;
@@ -66,5 +72,5 @@ module.exports = {
   get,
   create,
   update,
-  deleteItem
+  deleteEntity
 };
