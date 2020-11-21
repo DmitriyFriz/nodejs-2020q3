@@ -17,4 +17,22 @@ const get = async id => {
 
 const create = async board => DB.create(TABLE_NAME, board);
 
-module.exports = { getAll, get, create };
+const update = async (id, board) => {
+  const newBoard = await DB.update(TABLE_NAME, id, board);
+
+  if (!newBoard) {
+    throw new errors.BAD_REQUEST(`The board with id: ${id} doesn't exist`);
+  }
+
+  return newBoard;
+};
+
+const deleteBoard = async id => {
+  const deletedBoard = await DB.deleteEntity(TABLE_NAME, id);
+
+  if (!deletedBoard) {
+    throw new errors.NOT_FOUND(`The board with id: ${id} not found`);
+  }
+};
+
+module.exports = { getAll, get, create, update, deleteBoard };

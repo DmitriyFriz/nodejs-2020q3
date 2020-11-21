@@ -6,4 +6,8 @@ const get = id => boardsRepo.get(id);
 
 const create = board => boardsRepo.create(board);
 
-module.exports = { getAll, get, create };
+const update = (id, board) => boardsRepo.update(id, board);
+
+const deleteBoard = id => boardsRepo.deleteBoard(id);
+
+module.exports = { getAll, get, create, update, deleteBoard };

@@ -24,4 +24,24 @@ router.route('/').post(
   })
 );
 
+router.route('/:id').put(
+  errors.asyncWrapper(async (req, res) => {
+    const { title, columns } = req.body;
+    const board = await boardsService.update(req.params.id, {
+      title,
+      columns
+    });
+
+    res.json(board);
+  })
+);
+
+router.route('/:id').delete(
+  errors.asyncWrapper(async (req, res) => {
+    await boardsService.deleteBoard(req.params.id);
+
+    res.sendStatus(204);
+  })
+);
+
 module.exports = router;
