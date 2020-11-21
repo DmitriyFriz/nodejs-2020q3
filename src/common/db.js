@@ -10,29 +10,40 @@ const DB = {
 const getEntityById = async (tableName, id) =>
   DB[tableName].find(item => item.id === id);
 
+const entityClass = {
+  users: User,
+  boards: Board
+  // add tasks
+};
+
 const getAll = async tableName => DB[tableName].concat();
 
 const get = async (tableName, id) => {
   const item = await getEntityById(tableName, id);
-  return item ? { ...item } : undefined;
-};
 
-const create = async (tableName, entity) => {
-  DB[tableName].push(entity);
-  return get(tableName, entity.id);
-};
-
-const update = async (tableName, id, entity) => {
-  const oldEntity = await getEntityById(tableName, id);
-  const index = DB[tableName].indexOf(oldEntity);
-
-  if (index < 0) {
+  if (!item) {
     return undefined;
   }
 
-  DB[tableName][index] = { ...oldEntity, ...entity };
+  return item;
+};
 
-  return { ...DB[tableName][index] };
+const create = async (tableName, entity) => {
+  const createdEntity = new entityClass[tableName](entity);
+  DB[tableName].push(createdEntity);
+  return get(tableName, createdEntity.id);
+};
+
+const update = async (tableName, id, entity) => {
+  const updateEntity = await getEntityById(tableName, id);
+
+  if (!updateEntity) {
+    return undefined;
+  }
+
+  updateEntity.toUpdate({ ...updateEntity, ...entity });
+
+  return updateEntity;
 };
 
 const deleteEntity = async (tableName, id) => {

@@ -6,6 +6,11 @@ class Board {
     this.title = title;
     this.columns = columns.map(colum => new Column(colum));
   }
+
+  toUpdate({ title, columns }) {
+    this.title = title;
+    this.columns = columns.map(colum => new Column(colum));
+  }
 }
 
 class Column {

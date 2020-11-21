@@ -22,7 +22,7 @@ router.route('/:id').get(
 router.route('/').post(
   errors.asyncWrapper(async (req, res) => {
     const { name, login, password } = req.body;
-    const user = await usersService.create(new User({ name, login, password }));
+    const user = await usersService.create({ name, login, password });
 
     res.json(User.toResponse(user));
   })

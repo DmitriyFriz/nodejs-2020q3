@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const Board = require('./board.model');
 const boardsService = require('./board.service');
 const errors = require('../../errors/errors.handlers');
 
@@ -18,7 +17,7 @@ router.route('/:id').get(
 router.route('/').post(
   errors.asyncWrapper(async (req, res) => {
     const { title, columns } = req.body;
-    const board = await boardsService.create(new Board({ title, columns }));
+    const board = await boardsService.create({ title, columns });
 
     res.json(board);
   })
