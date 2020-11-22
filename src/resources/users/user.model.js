@@ -13,7 +13,7 @@ class User {
     this.password = password;
   }
 
-  toUpdate({ name, login, password }) {
+  toUpdate({ name = this.name, login = this.login, password = this.password }) {
     this.name = name;
     this.login = login;
     this.password = password;

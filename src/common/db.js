@@ -41,7 +41,7 @@ const update = async (tableName, id, entity) => {
     return undefined;
   }
 
-  updateEntity.toUpdate({ ...updateEntity, ...entity });
+  updateEntity.toUpdate(entity);
 
   return updateEntity;
 };

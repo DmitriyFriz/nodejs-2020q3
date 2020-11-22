@@ -7,7 +7,7 @@ class Board {
     this.columns = columns.map(colum => new Column(colum));
   }
 
-  toUpdate({ title, columns }) {
+  toUpdate({ title = this.title, columns = this.columns }) {
     this.title = title;
     this.columns = columns.map(colum => new Column(colum));
   }
