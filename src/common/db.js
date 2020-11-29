@@ -1,5 +1,6 @@
 const User = require('../resources/users/user.model');
 const Board = require('../resources/boards/board.model');
+const Task = require('../resources/tasks/task.model');
 
 const DB = {
   users: [],
@@ -7,14 +8,14 @@ const DB = {
   tasks: []
 };
 
-const getEntityById = async (tableName, id) =>
-  DB[tableName].find(item => item.id === id);
-
 const entityClass = {
   users: User,
-  boards: Board
-  // add tasks
+  boards: Board,
+  tasks: Task
 };
+
+const getEntityById = async (tableName, id) =>
+  DB[tableName].find(item => item.id === id);
 
 const getAll = async tableName => DB[tableName].concat();
 
@@ -57,6 +58,12 @@ const deleteEntity = async (tableName, id) => {
   return DB[tableName].splice(index, 1);
 };
 
+const filterByCondition = async (tableName, callback) => {
+  const data = await getAll(tableName);
+
+  return data.filter(callback);
+};
+
 // code below is for the testing
 DB.users.push(
   new User(),
@@ -76,6 +83,8 @@ DB.boards.push(
   })
 );
 
+DB.tasks.push(new Task({ order: 100 }), new Task());
+
 //
 
 module.exports = {
@@ -83,5 +92,6 @@ module.exports = {
   get,
   create,
   update,
-  deleteEntity
+  deleteEntity,
+  filterByCondition
 };
