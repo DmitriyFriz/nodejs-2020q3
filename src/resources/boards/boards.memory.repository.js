@@ -33,6 +33,8 @@ const deleteBoard = async id => {
   if (!deletedBoard) {
     throw new errors.NOT_FOUND(`The board with id: ${id} not found`);
   }
+
+  await DB.deleteTasksByBoard(id);
 };
 
 module.exports = { getAll, get, create, update, deleteBoard };

@@ -33,6 +33,8 @@ const deleteUser = async id => {
   if (!deletedUser) {
     throw new errors.NOT_FOUND(`The user with id: ${id} not found`);
   }
+
+  await DB.deleteUserInTasks(id);
 };
 
 module.exports = { getAll, get, create, update, deleteUser };

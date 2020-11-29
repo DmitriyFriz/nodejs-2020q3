@@ -64,6 +64,16 @@ const filterByCondition = async (tableName, callback) => {
   return data.filter(callback);
 };
 
+const deleteUserInTasks = async id => {
+  const tasks = await filterByCondition('tasks', task => task.userId === id);
+  tasks.forEach(task => task.toUpdate({ userId: null }));
+};
+
+const deleteTasksByBoard = async id => {
+  const tasks = await filterByCondition('tasks', task => task.boardId === id);
+  tasks.forEach(async task => await deleteEntity('tasks', task.id));
+};
+
 // code below is for the testing
 DB.users.push(
   new User(),
@@ -93,5 +103,7 @@ module.exports = {
   create,
   update,
   deleteEntity,
-  filterByCondition
+  filterByCondition,
+  deleteUserInTasks,
+  deleteTasksByBoard
 };
