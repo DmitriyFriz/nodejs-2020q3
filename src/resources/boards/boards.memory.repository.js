@@ -1,5 +1,5 @@
 const DB = require('../../common/db');
-const errors = require('../../errors/errors.list');
+const errors = require('../../common/errors/errors.list');
 
 const TABLE_NAME = 'boards';
 

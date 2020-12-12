@@ -5,7 +5,7 @@ const YAML = require('yamljs');
 const userRouter = require('./resources/users/user.router');
 const boardRouter = require('./resources/boards/board.router');
 const taskRouter = require('./resources/tasks/task.router');
-const errors = require('./errors/errors.handlers');
+const errors = require('./common/errors/errors.handlers');
 const logger = require('./common/logger');
 
 const app = express();
