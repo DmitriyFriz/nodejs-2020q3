@@ -7,12 +7,24 @@ const boardRouter = require('./resources/boards/board.router');
 const taskRouter = require('./resources/tasks/task.router');
 const errors = require('./errors/errors.handlers');
 
+const morgan = require('./common/morgan');
+const winston = require('./common/winston');
+
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
 app.use(express.json());
 
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+
+app.use(
+  morgan(
+    '[method: :method] [status: :status] [url: :url]  [body: :body]  [query: :query] [:response-time ms]',
+    {
+      stream: winston.stream
+    }
+  )
+);
 
 app.use('/', (req, res, next) => {
   if (req.originalUrl === '/') {
