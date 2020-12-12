@@ -3,7 +3,7 @@ const { createLogger, format, transports } = require('winston');
 const options = {
   infoFile: {
     level: 'info',
-    filename: `${__dirname}/../logs/app.log`,
+    filename: `${__dirname}/../../logs/app.log`,
     handleExceptions: true,
     json: true,
     maxsize: 5242880, // 5MB
@@ -12,8 +12,8 @@ const options = {
   },
 
   errorFile: {
-    level: 'info',
-    filename: `${__dirname}/../logs/error.log`,
+    level: 'error',
+    filename: `${__dirname}/../../logs/error.log`,
     handleExceptions: true,
     json: true,
     maxsize: 5242880, // 5MB

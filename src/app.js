@@ -6,9 +6,7 @@ const userRouter = require('./resources/users/user.router');
 const boardRouter = require('./resources/boards/board.router');
 const taskRouter = require('./resources/tasks/task.router');
 const errors = require('./errors/errors.handlers');
-
-const morgan = require('./common/morgan');
-const winston = require('./common/winston');
+const logger = require('./common/logger');
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
@@ -17,14 +15,7 @@ app.use(express.json());
 
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
-app.use(
-  morgan(
-    '[method: :method] [status: :status] [url: :url]  [body: :body]  [query: :query] [:response-time ms]',
-    {
-      stream: winston.stream
-    }
-  )
-);
+app.use(logger.logRequest);
 
 app.use('/', (req, res, next) => {
   if (req.originalUrl === '/') {
@@ -32,6 +23,10 @@ app.use('/', (req, res, next) => {
     return;
   }
   next();
+});
+
+app.get('/error', () => {
+  throw new Error('blaaaaaaaaaa');
 });
 
 app.use('/users', userRouter);
