@@ -33,6 +33,8 @@ app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 app.use('/boards/:boardId/tasks', taskRouter);
 
-app.use(errors.handleMiddleware);
+app.use(errors.handle);
+app.use(logger.logError);
+app.use(errors.send);
 
 module.exports = app;

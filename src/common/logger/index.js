@@ -12,4 +12,15 @@ const logRequest = (req, res, next) => {
   loggerRequest(req, res, next);
 };
 
-module.exports = { logRequest };
+const logError = (err, req, res, next) => {
+  const { method, originalUrl, body, query } = req;
+  const { statusCode, message } = err;
+  winston.error(
+    `[method: ${method}] [status: ${statusCode}] [url: ${originalUrl}] [error: ${message}] [body: ${JSON.stringify(
+      body
+    )}] [query: ${JSON.stringify(query)}]`
+  );
+  next(err);
+};
+
+module.exports = { logRequest, logError };
