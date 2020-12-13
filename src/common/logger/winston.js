@@ -5,6 +5,7 @@ const options = {
     level: 'info',
     filename: `${__dirname}/../../logs/app.log`,
     handleExceptions: true,
+    handleRejections: true,
     json: true,
     maxsize: 5242880, // 5MB
     maxFiles: 1,
@@ -15,6 +16,7 @@ const options = {
     level: 'error',
     filename: `${__dirname}/../../logs/error.log`,
     handleExceptions: true,
+    handleRejections: true,
     json: true,
     maxsize: 5242880, // 5MB
     maxFiles: 1,
@@ -24,6 +26,7 @@ const options = {
   console: {
     level: 'info',
     handleExceptions: true,
+    handleRejections: true,
     json: true
   }
 };
