@@ -15,7 +15,7 @@ app.use(express.json());
 
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
-app.use(logger.logRequest);
+app.use(logger.middlewareRequest);
 
 app.use('/', (req, res, next) => {
   if (req.originalUrl === '/') {
@@ -25,16 +25,12 @@ app.use('/', (req, res, next) => {
   next();
 });
 
-app.get('/error', () => {
-  throw new Error('blaaaaaaaaaa');
-});
-
 app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 app.use('/boards/:boardId/tasks', taskRouter);
 
 app.use(errors.handle);
-app.use(logger.logError);
+app.use(logger.middlewareError);
 app.use(errors.send);
 
 module.exports = app;

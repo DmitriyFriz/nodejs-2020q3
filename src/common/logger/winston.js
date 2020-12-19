@@ -1,4 +1,5 @@
 const { createLogger, format, transports } = require('winston');
+const { NODE_ENV } = require('../config');
 
 const options = {
   infoFile: {
@@ -31,11 +32,10 @@ const options = {
   }
 };
 
-const logger = createLogger({
+const loggerWinston = createLogger({
   transports: [
     new transports.File(options.infoFile),
-    new transports.File(options.errorFile),
-    new transports.Console(options.console)
+    new transports.File(options.errorFile)
   ],
   format: format.combine(
     format.simple(),
@@ -48,10 +48,14 @@ const logger = createLogger({
   exitOnError: false
 });
 
-logger.stream = {
+if (NODE_ENV === 'development') {
+  loggerWinston.add(new transports.Console(options.console));
+}
+
+loggerWinston.stream = {
   write(message) {
-    logger.info(message);
+    loggerWinston.info(message);
   }
 };
 
-module.exports = logger;
+module.exports = loggerWinston;
