@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const boardsService = require('./board.service');
-const errors = require('../../errors/errors.handlers');
+const errors = require('../../common/errors/errors.handlers');
 
 router.route('/').get(
   errors.asyncWrapper(async (req, res) => {

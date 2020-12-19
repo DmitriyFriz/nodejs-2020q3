@@ -1,6 +1,6 @@
 const router = require('express').Router({ mergeParams: true });
 const tasksService = require('./task.service');
-const errors = require('../../errors/errors.handlers');
+const errors = require('../../common/errors/errors.handlers');
 
 router.route('/').get(
   errors.asyncWrapper(async (req, res) => {
