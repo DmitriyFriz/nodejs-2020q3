@@ -23,6 +23,7 @@ router.route('/').post(
   errors.asyncWrapper(async (req, res) => {
     const { name, login, password } = req.body;
     const user = await usersService.create({ name, login, password });
+    console.log(user);
 
     res.json(User.toResponse(user));
   })

@@ -1,6 +1,23 @@
+const mongoose = require('mongoose');
+const { MONGO_CONNECTION_STRING } = require('./config');
+const logger = require('./logger');
 const User = require('../resources/users/user.model');
 const Board = require('../resources/boards/board.model');
 const Task = require('../resources/tasks/task.model');
+
+const connectToDB = cb => {
+  mongoose.connect(MONGO_CONNECTION_STRING, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  });
+  const db = mongoose.connection;
+  db.once('open', () => {
+    logger.info('Connect to DB');
+    db.dropDatabase();
+    new User({ name: 'b', login: 1, password: 4 }).save();
+    cb();
+  });
+};
 
 const DB = {
   users: [],
@@ -75,11 +92,6 @@ const deleteTasksByBoard = async id => {
 };
 
 // code below is for the testing
-DB.users.push(
-  new User(),
-  new User(),
-  new User({ name: 'b', login: 1, password: 4 })
-);
 
 DB.boards.push(
   new Board(),
@@ -98,6 +110,7 @@ DB.tasks.push(new Task({ order: 100 }), new Task());
 //
 
 module.exports = {
+  connectToDB,
   getAll,
   get,
   create,

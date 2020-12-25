@@ -1,12 +1,12 @@
-const DB = require('../../common/db');
+const User = require('./user.model');
 const errors = require('../../common/errors/errors.list');
 
-const TABLE_NAME = 'users';
-
-const getAll = async () => DB.getAll(TABLE_NAME);
+const getAll = async () => User.find();
 
 const get = async id => {
-  const user = await DB.get(TABLE_NAME, id);
+  const user = await User.findById(id);
+
+  console.log(user);
 
   if (!user) {
     throw new errors.NOT_FOUND(`The user with id: ${id} not found`);
@@ -15,10 +15,10 @@ const get = async id => {
   return user;
 };
 
-const create = async user => DB.create(TABLE_NAME, user);
+const create = async user => User.create(user);
 
 const update = async (id, user) => {
-  const newUser = await DB.update(TABLE_NAME, id, user);
+  const newUser = await User.findByIdAndUpdate(id, user, { new: true });
 
   if (!newUser) {
     throw new errors.BAD_REQUEST(`The user with id: ${id} doesn't exist`);
@@ -28,13 +28,13 @@ const update = async (id, user) => {
 };
 
 const deleteUser = async id => {
-  const deletedUser = await DB.deleteEntity(TABLE_NAME, id);
+  const deletedUser = await User.findByIdAndDelete(id);
 
   if (!deletedUser) {
-    throw new errors.NOT_FOUND(`The user with id: ${id} not found`);
+    throw new errors.NOT_FOUND(`The user with id: ${id} doesn't exist`);
   }
 
-  await DB.deleteUserInTasks(id);
+  // await DB.deleteUserInTasks(id);
 };
 
 module.exports = { getAll, get, create, update, deleteUser };
