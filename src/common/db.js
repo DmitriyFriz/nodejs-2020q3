@@ -10,11 +10,29 @@ const connectToDB = cb => {
     useNewUrlParser: true,
     useUnifiedTopology: true
   });
+
+  mongoose.set('toJSON', {
+    virtuals: true,
+    transform: (doc, converted) => {
+      delete converted._id;
+    }
+  });
+
   const db = mongoose.connection;
+
   db.once('open', () => {
     logger.info('Connect to DB');
     db.dropDatabase();
     new User({ name: 'b', login: 1, password: 4 }).save();
+    new Board({
+      title: 'my board',
+      columns: [
+        {
+          title: 'my first column',
+          order: 100500
+        }
+      ]
+    }).save();
     cb();
   });
 };
@@ -92,18 +110,6 @@ const deleteTasksByBoard = async id => {
 };
 
 // code below is for the testing
-
-DB.boards.push(
-  new Board(),
-  new Board({
-    title: 'my board',
-    columns: [
-      {
-        order: 100500
-      }
-    ]
-  })
-);
 
 DB.tasks.push(new Task({ order: 100 }), new Task());
 

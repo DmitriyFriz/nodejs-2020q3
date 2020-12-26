@@ -31,7 +31,7 @@ const deleteUser = async id => {
   const deletedUser = await User.findByIdAndDelete(id);
 
   if (!deletedUser) {
-    throw new errors.NOT_FOUND(`The user with id: ${id} doesn't exist`);
+    throw new errors.NOT_FOUND(`The user with id: ${id} not found`);
   }
 
   // await DB.deleteUserInTasks(id);

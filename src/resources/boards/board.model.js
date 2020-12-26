@@ -1,24 +1,30 @@
 const uuid = require('uuid');
+const mongoose = require('mongoose');
 
-class Board {
-  constructor({ id = uuid(), title = 'board', columns = [] } = {}) {
-    this.id = id;
-    this.title = title;
-    this.columns = columns.map(colum => new Column(colum));
-  }
+const columnSchema = new mongoose.Schema(
+  {
+    id: {
+      type: String,
+      default: uuid
+    },
+    title: String,
+    order: Number
+  },
+  { _id: false }
+);
 
-  toUpdate({ title = this.title, columns = this.columns }) {
-    this.title = title;
-    this.columns = columns.map(colum => new Column(colum));
-  }
-}
+const boardSchema = new mongoose.Schema(
+  {
+    _id: {
+      type: String,
+      default: uuid
+    },
+    title: String,
+    columns: [columnSchema]
+  },
+  { versionKey: false }
+);
 
-class Column {
-  constructor({ id = uuid(), title = 'column', order = 0 } = {}) {
-    this.id = id;
-    this.title = title;
-    this.order = order;
-  }
-}
+const Board = mongoose.model('Board', boardSchema);
 
 module.exports = Board;
