@@ -1,5 +1,6 @@
 const Board = require('./board.model');
 const errors = require('../../common/errors/errors.list');
+const { deleteTasksByBoardId } = require('../tasks/task.db.repository');
 
 const getAll = async () => Board.find();
 
@@ -32,7 +33,7 @@ const deleteBoard = async id => {
     throw new errors.NOT_FOUND(`The board with id: ${id} not found`);
   }
 
-  // await DB.deleteTasksByBoard(id);
+  await deleteTasksByBoardId(id);
 };
 
 module.exports = { getAll, get, create, update, deleteBoard };

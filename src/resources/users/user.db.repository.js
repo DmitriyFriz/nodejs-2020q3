@@ -1,5 +1,6 @@
 const User = require('./user.model');
 const errors = require('../../common/errors/errors.list');
+const { updateUserInTasks } = require('../tasks/task.db.repository');
 
 const getAll = async () => User.find();
 
@@ -34,7 +35,7 @@ const deleteUser = async id => {
     throw new errors.NOT_FOUND(`The user with id: ${id} not found`);
   }
 
-  // await DB.deleteUserInTasks(id);
+  await updateUserInTasks(id);
 };
 
 module.exports = { getAll, get, create, update, deleteUser };

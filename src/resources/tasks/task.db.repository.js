@@ -34,8 +34,6 @@ const update = async (boardId, taskId, task) => {
 const deleteTask = async (boardId, taskId) => {
   const deletedTask = await Task.findOneAndDelete({ _id: taskId, boardId });
 
-  console.log(deletedTask);
-
   if (!deletedTask) {
     throw new errors.NOT_FOUND(
       `The task with id: ${taskId} and board id: ${boardId} not found`
@@ -43,4 +41,17 @@ const deleteTask = async (boardId, taskId) => {
   }
 };
 
-module.exports = { getAll, get, create, update, deleteTask };
+const deleteTasksByBoardId = async boardId => Task.deleteMany({ boardId });
+
+const updateUserInTasks = async userId =>
+  Task.updateMany({ userId }, { userId: null });
+
+module.exports = {
+  getAll,
+  get,
+  create,
+  update,
+  deleteTask,
+  deleteTasksByBoardId,
+  updateUserInTasks
+};
