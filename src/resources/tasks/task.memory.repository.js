@@ -1,40 +1,46 @@
-const DB = require('../../common/db');
+const Task = require('./task.model');
 const errors = require('../../common/errors/errors.list');
 
-const TABLE_NAME = 'tasks';
-
-const getAll = async boardId =>
-  DB.filterByCondition(TABLE_NAME, item => item.boardId === boardId);
+const getAll = async boardId => Task.find({ boardId });
 
 const get = async (boardId, taskId) => {
-  const task = await DB.get(TABLE_NAME, taskId);
+  const task = await Task.findOne({ _id: taskId, boardId });
 
   if (!task) {
-    throw new errors.NOT_FOUND(`The task with id: ${taskId} not found`);
-  }
-
-  if (task.boardId !== boardId) {
-    throw new errors.BAD_REQUEST(
-      `The task with id: ${taskId} doesn't apply to the board with id: ${boardId}`
+    throw new errors.NOT_FOUND(
+      `The task with id: ${taskId} and board id: ${boardId} not found`
     );
   }
 
   return task;
 };
 
-const create = async task => DB.create(TABLE_NAME, task);
+const create = async task => Task.create(task);
 
 const update = async (boardId, taskId, task) => {
-  await get(boardId, taskId);
+  const newTask = await Task.findOneAndUpdate({ _id: taskId, boardId }, task, {
+    new: true
+  });
 
-  const newTask = await DB.update(TABLE_NAME, taskId, task);
+  if (!newTask) {
+    throw new errors.BAD_REQUEST(
+      `The task with id: ${taskId} and board id: ${boardId} doesn't exist`
+    );
+  }
 
   return newTask;
 };
 
 const deleteTask = async (boardId, taskId) => {
-  await get(boardId, taskId);
-  await DB.deleteEntity(TABLE_NAME, taskId);
+  const deletedTask = await Task.findOneAndDelete({ _id: taskId, boardId });
+
+  console.log(deletedTask);
+
+  if (!deletedTask) {
+    throw new errors.NOT_FOUND(
+      `The task with id: ${taskId} and board id: ${boardId} not found`
+    );
+  }
 };
 
 module.exports = { getAll, get, create, update, deleteTask };
