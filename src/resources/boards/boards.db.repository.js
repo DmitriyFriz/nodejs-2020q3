@@ -1,12 +1,11 @@
-const DB = require('../../common/db');
+const Board = require('./board.model');
 const errors = require('../../common/errors/errors.list');
+const { deleteTasksByBoardId } = require('../tasks/task.db.repository');
 
-const TABLE_NAME = 'boards';
-
-const getAll = async () => DB.getAll(TABLE_NAME);
+const getAll = async () => Board.find();
 
 const get = async id => {
-  const board = await DB.get(TABLE_NAME, id);
+  const board = await Board.findById(id);
 
   if (!board) {
     throw new errors.NOT_FOUND(`The board with id: ${id} not found`);
@@ -15,10 +14,10 @@ const get = async id => {
   return board;
 };
 
-const create = async board => DB.create(TABLE_NAME, board);
+const create = async board => Board.create(board);
 
 const update = async (id, board) => {
-  const newBoard = await DB.update(TABLE_NAME, id, board);
+  const newBoard = await Board.findByIdAndUpdate(id, board, { new: true });
 
   if (!newBoard) {
     throw new errors.BAD_REQUEST(`The board with id: ${id} doesn't exist`);
@@ -28,13 +27,13 @@ const update = async (id, board) => {
 };
 
 const deleteBoard = async id => {
-  const deletedBoard = await DB.deleteEntity(TABLE_NAME, id);
+  const deletedBoard = await Board.findByIdAndDelete(id);
 
   if (!deletedBoard) {
     throw new errors.NOT_FOUND(`The board with id: ${id} not found`);
   }
 
-  await DB.deleteTasksByBoard(id);
+  await deleteTasksByBoardId(id);
 };
 
 module.exports = { getAll, get, create, update, deleteBoard };
